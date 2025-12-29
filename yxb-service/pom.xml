@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.yxb</groupId>
+        <artifactId>yxb-backend</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>yxb-service</artifactId>
+    <packaging>pom</packaging>
+    <name>yxb-service</name>
+    <description>业务服务模块</description>
+
+    <modules>
+        <module>yxb-user</module>
+        <module>yxb-video</module>
+        <module>yxb-ai</module>
+        <module>yxb-study</module>
+        <module>yxb-wechat</module>
+    </modules>
+
+</project>

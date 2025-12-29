@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxb.user.mapper.UserWechatMapper">
+
+    <select id="selectByUnionId" resultType="com.yxb.user.domain.entity.UserWechat">
+        SELECT * FROM user_wechat WHERE union_id = #{unionId} AND deleted = 0
+    </select>
+
+    <select id="selectByOpenIdApp" resultType="com.yxb.user.domain.entity.UserWechat">
+        SELECT * FROM user_wechat WHERE open_id_app = #{openId} AND deleted = 0
+    </select>
+
+    <select id="selectByOpenIdMini" resultType="com.yxb.user.domain.entity.UserWechat">
+        SELECT * FROM user_wechat WHERE open_id_mini = #{openId} AND deleted = 0
+    </select>
+
+    <select id="selectByOpenIdMp" resultType="com.yxb.user.domain.entity.UserWechat">
+        SELECT * FROM user_wechat WHERE open_id_mp = #{openId} AND deleted = 0
+    </select>
+
+    <select id="selectByUserId" resultType="com.yxb.user.domain.entity.UserWechat">
+        SELECT * FROM user_wechat WHERE user_id = #{userId} AND deleted = 0
+    </select>
+
+</mapper>

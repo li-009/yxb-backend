@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxb.user.mapper.UserVipMapper">
+
+    <select id="selectActiveByUserId" resultType="com.yxb.user.domain.entity.UserVip">
+        SELECT * FROM user_vip 
+        WHERE user_id = #{userId} 
+          AND status = 1 
+          AND end_time > NOW() 
+          AND deleted = 0
+        ORDER BY vip_level DESC, end_time DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectListByUserId" resultType="com.yxb.user.domain.entity.UserVip">
+        SELECT * FROM user_vip 
+        WHERE user_id = #{userId} AND deleted = 0
+        ORDER BY id DESC
+    </select>
+
+</mapper>

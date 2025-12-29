@@ -1,0 +1,28 @@
+-- 用户信息表
+CREATE TABLE `user_info` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `username` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `password` varchar(100) DEFAULT NULL COMMENT '密码',
+  `phone` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
+  `nickname` varchar(50) DEFAULT NULL COMMENT '昵称',
+  `avatar` varchar(500) DEFAULT NULL COMMENT '头像',
+  `gender` tinyint DEFAULT '0' COMMENT '性别 0-未知 1-男 2-女',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '用户状态 0-禁用 1-正常',
+  `vip_level` tinyint NOT NULL DEFAULT '0' COMMENT 'VIP等级 0-普通用户 1-VIP 2-SVIP',
+  `vip_expire_time` datetime DEFAULT NULL COMMENT 'VIP过期时间',
+  `study_language` varchar(10) DEFAULT 'en' COMMENT '学习语言代码',
+  `language_level` tinyint DEFAULT '1' COMMENT '语言水平 1-入门 2-初级 3-中级 4-高级',
+  `total_study_minutes` int NOT NULL DEFAULT '0' COMMENT '累计学习时长(分钟)',
+  `total_study_days` int NOT NULL DEFAULT '0' COMMENT '累计学习天数',
+  `points` int NOT NULL DEFAULT '0' COMMENT '积分',
+  `last_login_time` datetime DEFAULT NULL COMMENT '最后登录时间',
+  `last_login_ip` varchar(50) DEFAULT NULL COMMENT '最后登录IP',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除 0-否 1-是',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_phone` (`phone`),
+  KEY `idx_status` (`status`),
+  KEY `idx_vip_level` (`vip_level`)
+) COMMENT='用户信息表';

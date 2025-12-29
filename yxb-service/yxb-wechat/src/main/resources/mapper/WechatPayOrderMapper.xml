@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxb.wechat.mapper.WechatPayOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.yxb.wechat.domain.entity.WechatPayOrder">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="out_trade_no" property="outTradeNo"/>
+        <result column="transaction_id" property="transactionId"/>
+        <result column="total_fee" property="totalFee"/>
+        <result column="body" property="body"/>
+        <result column="pay_status" property="payStatus"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+</mapper>

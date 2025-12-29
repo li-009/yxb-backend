@@ -1,0 +1,113 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: yxb-gateway
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER:127.0.0.1:8850}
+        namespace: yxb-backend
+      config:
+        server-addr: ${NACOS_SERVER:127.0.0.1:8850}
+        namespace: yxb-backend
+        file-extension: yml
+        import-check:
+          enabled: false
+    sentinel:
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD:127.0.0.1:8080}
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        # 用户服务
+        - id: yxb-user
+          uri: lb://yxb-user
+          predicates:
+            - Path=/api/user/**,/api/auth/**
+          filters:
+            - StripPrefix=1
+        # 视频服务
+        - id: yxb-video
+          uri: lb://yxb-video
+          predicates:
+            - Path=/api/video/**
+          filters:
+            - StripPrefix=1
+        # AI服务
+        - id: yxb-ai
+          uri: lb://yxb-ai
+          predicates:
+            - Path=/api/ai/**
+          filters:
+            - StripPrefix=1
+        # 学习服务
+        - id: yxb-study
+          uri: lb://yxb-study
+          predicates:
+            - Path=/api/study/**
+          filters:
+            - StripPrefix=1
+        # 微信服务
+        - id: yxb-wechat
+          uri: lb://yxb-wechat
+          predicates:
+            - Path=/api/wechat/**
+          filters:
+            - StripPrefix=2
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6380}
+      password: ${REDIS_PASSWORD:}
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
+
+sa-token:
+  token-name: Authorization
+  timeout: 604800
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  is-log: false
+
+# 白名单路径
+gateway:
+  ignore:
+    urls:
+      - /api/auth/login
+      - /api/auth/register
+      - /api/auth/wechat/**
+      - /api/wechat/miniapp/login
+      - /api/wechat/miniapp/phone
+      - /api/wechat/pay/notify
+      - /api/video/page
+      - /api/video/category/**
+      - /actuator/**
+      - /doc.html
+      - /webjars/**
+      - /swagger-resources/**
+      - /v3/api-docs/**
+
+logging:
+  level:
+    com.yxb: debug
+    org.springframework.cloud.gateway: debug

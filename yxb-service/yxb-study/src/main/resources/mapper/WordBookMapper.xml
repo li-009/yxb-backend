@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxb.study.mapper.WordBookMapper">
+    <select id="selectPageByUser" resultType="com.yxb.study.domain.entity.WordBook">
+        SELECT * FROM study_word_book WHERE user_id = #{userId} AND deleted = 0
+        <if test="masteryStatus != null">AND mastery_status = #{masteryStatus}</if>
+        ORDER BY id DESC
+    </select>
+    <select id="selectNeedReview" resultType="com.yxb.study.domain.entity.WordBook">
+        SELECT * FROM study_word_book WHERE user_id = #{userId} AND deleted = 0 
+        AND next_review_time &lt;= NOW() AND mastery_status &lt; 2
+        ORDER BY next_review_time LIMIT #{limit}
+    </select>
+    <select id="selectByUserAndWord" resultType="com.yxb.study.domain.entity.WordBook">
+        SELECT * FROM study_word_book WHERE user_id = #{userId} AND word = #{word} AND deleted = 0 LIMIT 1
+    </select>
+</mapper>

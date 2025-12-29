@@ -1,0 +1,23 @@
+TabBar 图标文件需要放在此目录：
+
+所需图标（建议 81x81 像素 PNG）：
+├── home.png          # 主页-未选中（灰色 #666666）
+├── home-active.png   # 主页-选中（白色 #ffffff）
+├── file.png          # 文件-未选中
+├── file-active.png   # 文件-选中
+├── mine.png          # 我的-未选中
+└── mine-active.png   # 我的-选中
+
+其他资源：
+├── youtube-logo.png  # YouTube Logo（首页使用）
+
+图标设计建议：
+- 未选中状态：#666666（深灰色）
+- 选中状态：#ffffff（白色）
+- 背景色：#1a1a1a（深色主题）
+- 风格：线性图标，简洁现代
+
+可使用以下工具生成：
+- Iconfont (https://www.iconfont.cn/)
+- Flaticon (https://www.flaticon.com/)
+- Figma / Sketch 自行设计

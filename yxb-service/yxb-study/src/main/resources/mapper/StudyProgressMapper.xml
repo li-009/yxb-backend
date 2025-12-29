@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxb.study.mapper.StudyProgressMapper">
+    <select id="selectByUserAndVideo" resultType="com.yxb.study.domain.entity.StudyProgress">
+        SELECT * FROM study_progress WHERE user_id = #{userId} AND video_id = #{videoId} AND deleted = 0
+    </select>
+    <select id="selectPageByUser" resultType="com.yxb.study.domain.entity.StudyProgress">
+        SELECT * FROM study_progress WHERE user_id = #{userId} AND deleted = 0 ORDER BY last_study_time DESC
+    </select>
+</mapper>

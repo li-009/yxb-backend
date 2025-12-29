@@ -1,0 +1,14 @@
+{
+  "name": "yxb-miniprogram",
+  "appid": "__UNI__YXB",
+  "description": "",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false
+    }
+  }
+}

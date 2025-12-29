@@ -1,0 +1,91 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: yxb-wechat
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER:127.0.0.1:8850}
+        namespace: yxb-backend
+      config:
+        server-addr: ${NACOS_SERVER:127.0.0.1:8850}
+        namespace: yxb-backend
+        file-extension: yml
+        import-check:
+          enabled: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3307}/yxb_wechat?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:yxb123456}
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6380}
+      database: 0
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.yxb.wechat.domain.entity
+  global-config:
+    db-config:
+      id-type: assign_id
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+sa-token:
+  token-name: Authorization
+  timeout: 604800
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  is-log: false
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+logging:
+  level:
+    com.yxb: debug
+
+# 微信配置
+wechat:
+  miniapp:
+    appid: ${WECHAT_MINIAPP_APPID:}
+    secret: ${WECHAT_MINIAPP_SECRET:}
+  pay:
+    appid: ${WECHAT_PAY_APPID:}
+    mch-id: ${WECHAT_PAY_MCH_ID:}
+    mch-key: ${WECHAT_PAY_MCH_KEY:}
+    notify-url: ${WECHAT_PAY_NOTIFY_URL:}
+    key-path: ${WECHAT_PAY_KEY_PATH:}
+  mp:
+    appid: ${WECHAT_MP_APPID:}
+    secret: ${WECHAT_MP_SECRET:}
+    token: ${WECHAT_MP_TOKEN:}
+    aes-key: ${WECHAT_MP_AES_KEY:}
