@@ -32,4 +32,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     public boolean decrementCollectCount(Long id) {
         return baseMapper.decrementCollectCount(id) > 0;
     }
+
+    @Override
+    public IPage<Video> search(int pageNum, int pageSize, String keyword, String language, Integer level) {
+        return baseMapper.search(new Page<>(pageNum, pageSize), keyword, language, level);
+    }
 }

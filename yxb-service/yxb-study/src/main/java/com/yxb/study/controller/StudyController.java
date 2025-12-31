@@ -2,9 +2,11 @@ package com.yxb.study.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yxb.api.study.dto.StudyProgressDTO;
+import com.yxb.api.study.dto.StudyNoteDTO;
 import com.yxb.api.study.dto.WordBookDTO;
 import com.yxb.common.core.result.Result;
 import com.yxb.study.biz.StudyBiz;
+import com.yxb.study.domain.entity.StudyNote;
 import com.yxb.study.domain.entity.WordBook;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -63,5 +65,66 @@ public class StudyController {
     public Result<Void> updateWordMastery(@PathVariable Long id, @RequestParam Integer masteryStatus) {
         studyBiz.updateWordMastery(id, masteryStatus);
         return Result.success();
+    }
+
+    @Operation(summary = "添加笔记")
+    @PostMapping("/note/add")
+    public Result<Void> addNote(@RequestBody StudyNote note) {
+        studyBiz.addNote(note);
+        return Result.success();
+    }
+
+    @Operation(summary = "分页查询笔记")
+    @GetMapping("/note/page")
+    public Result<IPage<StudyNoteDTO>> pageNotes(@RequestParam(required = false) Long videoId,
+                                                  @RequestParam(defaultValue = "1") Integer pageNum,
+                                                  @RequestParam(defaultValue = "20") Integer pageSize) {
+        return Result.success(studyBiz.pageNotes(videoId, pageNum, pageSize));
+    }
+
+    @Operation(summary = "删除笔记")
+    @DeleteMapping("/note/{id}")
+    public Result<Void> deleteNote(@PathVariable Long id) {
+        studyBiz.deleteNote(id);
+        return Result.success();
+    }
+
+    @Operation(summary = "获取笔记数量")
+    @GetMapping("/note/count")
+    public Result<Integer> getNoteCount() {
+        return Result.success(studyBiz.getNoteCount());
+    }
+
+    @Operation(summary = "收藏视频")
+    @PostMapping("/collect/{videoId}")
+    public Result<Void> collectVideo(@PathVariable Long videoId) {
+        studyBiz.collectVideo(videoId);
+        return Result.success();
+    }
+
+    @Operation(summary = "取消收藏")
+    @DeleteMapping("/collect/{videoId}")
+    public Result<Void> uncollectVideo(@PathVariable Long videoId) {
+        studyBiz.uncollectVideo(videoId);
+        return Result.success();
+    }
+
+    @Operation(summary = "检查是否已收藏")
+    @GetMapping("/collect/{videoId}/check")
+    public Result<Boolean> isVideoCollected(@PathVariable Long videoId) {
+        return Result.success(studyBiz.isVideoCollected(videoId));
+    }
+
+    @Operation(summary = "分页查询收藏列表")
+    @GetMapping("/collect/page")
+    public Result<IPage<Long>> pageCollectedVideos(@RequestParam(defaultValue = "1") Integer pageNum,
+                                                    @RequestParam(defaultValue = "20") Integer pageSize) {
+        return Result.success(studyBiz.pageCollectedVideos(pageNum, pageSize));
+    }
+
+    @Operation(summary = "获取收藏数量")
+    @GetMapping("/collect/count")
+    public Result<Integer> getCollectCount() {
+        return Result.success(studyBiz.getCollectCount());
     }
 }

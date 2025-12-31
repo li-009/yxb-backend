@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 用户对象转换器
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserConvert {
 
     UserConvert INSTANCE = Mappers.getMapper(UserConvert.class);

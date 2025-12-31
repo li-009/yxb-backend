@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import com.yxb.video.domain.vo.VideoImportRequest;
+import org.springframework.web.multipart.MultipartFile;
+
 @Tag(name = "视频管理")
 @RestController
 @RequestMapping("/video")
@@ -53,5 +56,31 @@ public class VideoController {
     public Result<Void> play(@PathVariable Long id) {
         videoBiz.incrementPlayCount(id);
         return Result.success();
+    }
+
+    @Operation(summary = "搜索视频")
+    @GetMapping("/search")
+    public Result<IPage<VideoDTO>> search(@RequestParam String keyword,
+                                          @RequestParam(defaultValue = "1") Integer pageNum,
+                                          @RequestParam(defaultValue = "10") Integer pageSize,
+                                          @RequestParam(required = false) String language,
+                                          @RequestParam(required = false) Integer level) {
+        return Result.success(videoBiz.searchVideos(pageNum, pageSize, keyword, language, level));
+    }
+
+    @Operation(summary = "通过URL导入视频")
+    @PostMapping("/import/url")
+    public Result<VideoDTO> importByUrl(@RequestBody VideoImportRequest request) {
+        return Result.success(videoBiz.importByUrl(request));
+    }
+
+    @Operation(summary = "上传视频文件")
+    @PostMapping("/upload")
+    public Result<VideoDTO> uploadVideo(@RequestPart("file") MultipartFile file,
+                                        @RequestParam String title,
+                                        @RequestParam(required = false) String description,
+                                        @RequestParam(defaultValue = "en") String language,
+                                        @RequestParam(defaultValue = "1") Integer level) {
+        return Result.success(videoBiz.uploadVideo(file, title, description, language, level));
     }
 }

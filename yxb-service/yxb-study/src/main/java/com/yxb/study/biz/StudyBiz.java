@@ -10,7 +10,12 @@ import com.yxb.study.convert.StudyConvert;
 import com.yxb.study.domain.entity.StudyProgress;
 import com.yxb.study.domain.entity.WordBook;
 import com.yxb.study.service.StudyProgressService;
+import com.yxb.study.service.StudyNoteService;
+import com.yxb.study.service.UserCollectService;
 import com.yxb.study.service.WordBookService;
+import com.yxb.study.domain.entity.StudyNote;
+import com.yxb.study.domain.entity.UserCollect;
+import com.yxb.api.study.dto.StudyNoteDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,6 +30,8 @@ public class StudyBiz {
 
     private final StudyProgressService progressService;
     private final WordBookService wordBookService;
+    private final StudyNoteService noteService;
+    private final UserCollectService collectService;
     private final UserFeignClient userFeignClient;
     private final VideoFeignClient videoFeignClient;
 
@@ -102,5 +109,83 @@ public class StudyBiz {
         };
         word.setNextReviewTime(LocalDateTime.now().plusDays(days));
         wordBookService.updateById(word);
+    }
+
+    public void addNote(StudyNote note) {
+        Long userId = UserContextHolder.requireUserId();
+        note.setUserId(userId);
+        noteService.save(note);
+    }
+
+    public IPage<StudyNoteDTO> pageNotes(Long videoId, int pageNum, int pageSize) {
+        Long userId = UserContextHolder.requireUserId();
+        IPage<StudyNote> page = noteService.pageByUser(userId, videoId, pageNum, pageSize);
+        return page.convert(this::toNoteDTO);
+    }
+
+    public void deleteNote(Long noteId) {
+        StudyNote note = noteService.getById(noteId);
+        if (note != null) {
+            note.setDeleted(1);
+            noteService.updateById(note);
+        }
+    }
+
+    public int getNoteCount() {
+        Long userId = UserContextHolder.requireUserId();
+        return noteService.countByUser(userId);
+    }
+
+    private StudyNoteDTO toNoteDTO(StudyNote note) {
+        StudyNoteDTO dto = new StudyNoteDTO();
+        dto.setId(note.getId());
+        dto.setUserId(note.getUserId());
+        dto.setVideoId(note.getVideoId());
+        dto.setTimestamp(note.getTimestamp());
+        dto.setContent(note.getContent());
+        dto.setSubtitleText(note.getSubtitleText());
+        dto.setCategory(note.getCategory());
+        dto.setTags(note.getTags());
+        dto.setCreateTime(note.getCreateTime());
+        dto.setUpdateTime(note.getUpdateTime());
+        return dto;
+    }
+
+    public void collectVideo(Long videoId) {
+        Long userId = UserContextHolder.requireUserId();
+        UserCollect existing = collectService.getByUserAndVideo(userId, videoId);
+        if (existing != null) {
+            return;
+        }
+        UserCollect collect = new UserCollect();
+        collect.setUserId(userId);
+        collect.setVideoId(videoId);
+        collect.setCollectType(1);
+        collectService.save(collect);
+    }
+
+    public void uncollectVideo(Long videoId) {
+        Long userId = UserContextHolder.requireUserId();
+        UserCollect collect = collectService.getByUserAndVideo(userId, videoId);
+        if (collect != null) {
+            collect.setDeleted(1);
+            collectService.updateById(collect);
+        }
+    }
+
+    public boolean isVideoCollected(Long videoId) {
+        Long userId = UserContextHolder.requireUserId();
+        return collectService.isCollected(userId, videoId);
+    }
+
+    public IPage<Long> pageCollectedVideos(int pageNum, int pageSize) {
+        Long userId = UserContextHolder.requireUserId();
+        IPage<UserCollect> page = collectService.pageByUser(userId, pageNum, pageSize);
+        return page.convert(UserCollect::getVideoId);
+    }
+
+    public int getCollectCount() {
+        Long userId = UserContextHolder.requireUserId();
+        return collectService.countByUser(userId);
     }
 }

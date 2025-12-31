@@ -27,4 +27,18 @@
     <update id="decrementCollectCount">
         UPDATE video_info SET collect_count = GREATEST(collect_count - 1, 0) WHERE id = #{id}
     </update>
+
+    <select id="search" resultType="com.yxb.video.domain.entity.Video">
+        SELECT * FROM video_info WHERE deleted = 0 AND status = 1
+        <if test="keyword != null and keyword != ''">
+            AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="language != null and language != ''">
+            AND language = #{language}
+        </if>
+        <if test="level != null">
+            AND level = #{level}
+        </if>
+        ORDER BY id DESC
+    </select>
 </mapper>

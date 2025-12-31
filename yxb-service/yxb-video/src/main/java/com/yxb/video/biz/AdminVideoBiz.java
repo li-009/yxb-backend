@@ -23,7 +23,7 @@ import org.springframework.util.StringUtils;
 public class AdminVideoBiz {
 
     private final VideoService videoService;
-    private final VideoConvert videoConvert;
+    private final VideoConvert videoConvert = VideoConvert.INSTANCE;
 
     /**
      * 分页查询视频

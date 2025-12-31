@@ -11,7 +11,9 @@ import com.yxb.video.domain.entity.VideoSubtitle;
 import com.yxb.video.service.VideoService;
 import com.yxb.video.service.VideoSubtitleService;
 import com.yxb.video.subtitle.SubtitleParser;
+import com.yxb.video.domain.vo.VideoImportRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -59,6 +61,40 @@ public class VideoBiz {
 
     public void decrementCollectCount(Long id) {
         videoService.decrementCollectCount(id);
+    }
+
+    public IPage<VideoDTO> searchVideos(int pageNum, int pageSize, String keyword, String language, Integer level) {
+        IPage<Video> page = videoService.search(pageNum, pageSize, keyword, language, level);
+        return page.convert(VideoConvert.INSTANCE::toDTO);
+    }
+
+    public VideoDTO importByUrl(VideoImportRequest request) {
+        Video video = new Video();
+        video.setTitle(request.getTitle());
+        video.setDescription(request.getDescription());
+        video.setVideoUrl(request.getVideoUrl());
+        video.setCoverUrl(request.getCoverUrl());
+        video.setDuration(request.getDuration() != null ? request.getDuration() : 0);
+        video.setLanguage(request.getLanguage() != null ? request.getLanguage() : "en");
+        video.setLevel(request.getLevel() != null ? request.getLevel() : 1);
+        video.setSource(2);
+        video.setStatus(1);
+        videoService.save(video);
+        return VideoConvert.INSTANCE.toDTO(video);
+    }
+
+    public VideoDTO uploadVideo(MultipartFile file, String title, String description, String language, Integer level) {
+        Video video = new Video();
+        video.setTitle(title);
+        video.setDescription(description);
+        video.setVideoUrl("/uploads/" + file.getOriginalFilename());
+        video.setLanguage(language);
+        video.setLevel(level);
+        video.setSource(1);
+        video.setStatus(1);
+        videoService.save(video);
+        log.info("视频上传成功: {}", title);
+        return VideoConvert.INSTANCE.toDTO(video);
     }
 
     private SubtitleDTO convertSubtitle(VideoSubtitle subtitle) {

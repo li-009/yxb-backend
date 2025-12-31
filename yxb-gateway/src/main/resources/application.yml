@@ -9,10 +9,10 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: ${NACOS_SERVER:127.0.0.1:8850}
+        server-addr: ${NACOS_SERVER:192.168.1.53:8850}
         namespace: yxb-backend
       config:
-        server-addr: ${NACOS_SERVER:127.0.0.1:8850}
+        server-addr: ${NACOS_SERVER:192.168.1.53:8850}
         namespace: yxb-backend
         file-extension: yml
         import-check:
@@ -37,7 +37,7 @@ spring:
         - id: yxb-video
           uri: lb://yxb-video
           predicates:
-            - Path=/api/video/**
+            - Path=/api/video/**,/api/upload/**
           filters:
             - StripPrefix=1
         # AI服务

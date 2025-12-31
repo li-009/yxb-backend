@@ -18,4 +18,7 @@ public interface VideoMapper extends BaseMapper<Video> {
     int incrementCollectCount(@Param("id") Long id);
     
     int decrementCollectCount(@Param("id") Long id);
+    
+    IPage<Video> search(Page<Video> page, @Param("keyword") String keyword,
+                        @Param("language") String language, @Param("level") Integer level);
 }
